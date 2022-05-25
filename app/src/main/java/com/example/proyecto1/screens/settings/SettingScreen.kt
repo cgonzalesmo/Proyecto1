@@ -46,7 +46,7 @@ fun SettingScreen(
             navigator = navigator,
             title = {
                 Text(
-                    text = "Location settings",
+                    text = "Configurar Ubicación",
                     color = Color.White,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -83,7 +83,7 @@ fun SettingScreen(
                             Toast
                                 .makeText(
                                     context,
-                                    "${location.locationName} selected as the default location",
+                                    "${location.locationName} Ubicación seleccionada por defecto",
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()
@@ -129,7 +129,7 @@ fun SettingScreen(
                 title = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Add City",
+                        text = "Añadir Ciudad",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp,
@@ -149,8 +149,8 @@ fun SettingScreen(
                                 viewModel.setTextFieldValue(it)
                             },
                             textStyle = TextStyle(color = Color.White),
-                            label = { Text(text = "Enter your city", color = Color.LightGray) },
-                            placeholder = { Text(text = "Nairobi", color = Color.LightGray) },
+                            label = { Text(text = "Ingresa el Nombre", color = Color.LightGray) },
+                            placeholder = { Text(text = "Arequipa", color = Color.LightGray) },
                         )
                     }
                 },
@@ -162,7 +162,7 @@ fun SettingScreen(
                         },
                         colors = ButtonDefaults.buttonColors(MyBlue)
                     ) {
-                        Text(text = "Save", color = Color.White)
+                        Text(text = "Guardar", color = Color.White)
                     }
                 },
                 backgroundColor = SecondaryPrimaryDark,
