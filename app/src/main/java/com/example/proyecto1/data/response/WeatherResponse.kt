@@ -1,10 +1,10 @@
 package com.example.proyecto1.data.response
 
 
+import com.example.proyecto1.model.Current
+import com.example.proyecto1.model.Forecast
+import com.example.proyecto1.model.Location
 import com.google.gson.annotations.SerializedName
-import com.kanyideveloper.haliyaanga.model.Current
-import com.kanyideveloper.haliyaanga.model.Forecast
-import com.kanyideveloper.haliyaanga.model.Location
 
 data class WeatherResponse(
     @SerializedName("current")
