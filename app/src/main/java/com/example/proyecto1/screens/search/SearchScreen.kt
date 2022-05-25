@@ -59,7 +59,7 @@ fun SearchScreen(
             navigator = navigator,
             title = {
                 Text(
-                    text = "Search",
+                    text = "Buscar",
                     color = Color.White,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -162,7 +162,7 @@ fun SearchScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Wind",
+                                text = "Viento",
                                 fontSize = 12.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -181,7 +181,7 @@ fun SearchScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Humidity",
+                                text = "Humedad",
                                 fontSize = 12.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -200,7 +200,7 @@ fun SearchScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Precipitation",
+                                text = "Precipitacion",
                                 fontSize = 12.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -227,7 +227,7 @@ fun SearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp),
-                        text = "Hourly Forecast",
+                        text = "Pronostico por hora",
                         fontSize = 14.sp,
                         color = Color.White,
                     )
@@ -281,7 +281,7 @@ fun SearchBar(
         },
         placeholder = {
             Text(
-                text = "Search...",
+                text = "Buscar...",
                 color = Color.LightGray
             )
         },

@@ -168,7 +168,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Wind",
+                    text = "Viento",
                     fontSize = 12.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -187,7 +187,7 @@ fun HomeScreen(
                 horizontalAlignment = CenterHorizontally
             ) {
                 Text(
-                    text = "Humidity",
+                    text = "Humedad",
                     fontSize = 12.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -206,7 +206,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Precipitation",
+                    text = "Precipitacion",
                     fontSize = 12.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -233,7 +233,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp),
-            text = "Hourly Forecast",
+            text = "Pronostico por hora",
             fontSize = 14.sp,
             color = Color.White,
         )
@@ -262,7 +262,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp),
-            text = "Daily Forecast",
+            text = "Pronostico por dia",
             fontSize = 14.sp,
             color = Color.White,
         )

@@ -19,7 +19,7 @@ class DataRepository(
 ) {
 
     val currentlySelectedLocation =
-        MutableStateFlow(sharedPreferences.getString(WEATHER_LOCATION, "Nairobi"))
+        MutableStateFlow(sharedPreferences.getString(WEATHER_LOCATION, "Arequipa"))
 
     suspend fun getWeatherData(location: String): Resource<WeatherResponse> {
         return try {
@@ -28,11 +28,11 @@ class DataRepository(
             )
         } catch (e: IOException) {
             return Resource.Error(
-                message = "Oops! couldn't reach server, check your internet connection."
+                message = "¡Ups! No se pudo conectar con el servidor, verifique su conexión a Internet."
             )
         } catch (e: HttpException) {
             return Resource.Error(
-                message = "Oops! something went wrong. Please try again"
+                message = "¡Ups! algo salió mal. Inténtalo de nuevo"
             )
         }
     }
