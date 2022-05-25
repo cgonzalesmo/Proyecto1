@@ -1,5 +1,7 @@
 package com.example.proyecto1.data.remote
 
+import com.example.proyecto1.data.response.WeatherResponse
+import com.example.proyecto1.BuildConfig.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
 
