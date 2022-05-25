@@ -1,4 +1,4 @@
-package com.kanyideveloper.haliyaanga.model
+package com.example.proyecto1.model
 
 
 import com.google.gson.annotations.SerializedName
