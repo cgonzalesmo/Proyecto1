@@ -5,4 +5,5 @@ object Constants {
     const val WEATHER_LOCATION = "WEATHER_LOCATION"
     const val DATABASE_NAME = "locations_database"
     const val TABLE_NAME = "locations_table"
+    const val TABLE2_NAME = "notes_table"
 }

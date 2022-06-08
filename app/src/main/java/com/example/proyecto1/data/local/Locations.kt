@@ -7,5 +7,8 @@ import com.example.proyecto1.util.Constants.TABLE_NAME
 @Entity(tableName = TABLE_NAME)
 data class Locations(
     val locationName: String,
+    val locationDescription: String,
+    var locationAltitude: String,
+    var locationLatitude: String,
     @PrimaryKey(autoGenerate = true) val id: Int? = null
 )
