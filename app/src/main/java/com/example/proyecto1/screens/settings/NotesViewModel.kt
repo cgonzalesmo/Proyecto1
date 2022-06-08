@@ -9,10 +9,11 @@ import com.example.proyecto1.data.notes.Notes
 import com.example.proyecto1.data.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-public class NotesViewModel @Inject constructor(
+class NotesViewModel @Inject constructor(
     private val repository: NoteRepository,
 ) : ViewModel() {
 
@@ -20,11 +21,24 @@ public class NotesViewModel @Inject constructor(
     private val _textFieldValue = mutableStateOf("")
     val textFieldValue: State<String> = _textFieldValue
 
+    private val _textFieldDesValue = mutableStateOf("")
+    val textFieldDesValue: State<String> = _textFieldDesValue
+
+    private val _idCurrent = mutableStateOf(1)
+    val idCurrent: State<Int> = _idCurrent
+
+
     val notes = repository.getAllNotes()
 
 
     fun setTextFieldValue(value: String) {
         _textFieldValue.value = value
+    }
+    fun setTextFieldDesValue(value: String) {
+        _textFieldDesValue.value = value
+    }
+    fun setIdCurrent(value: Int){
+        _idCurrent.value = value
     }
 
     fun insertNotes() {
@@ -32,7 +46,22 @@ public class NotesViewModel @Inject constructor(
             if (textFieldValue.value.isBlank()) {
                 return@launch
             }
-            repository.insertNotes(Notes(textFieldValue.value,"aa","19-9-2020"))
+            repository.insertNotes(Notes(textFieldValue.value,textFieldDesValue.value,getCurrentDateTime().toString()))
         }
     }
+    fun editNotes() {
+        viewModelScope.launch {
+            repository.updateNotes(Notes(textFieldValue.value,textFieldDesValue.value,getCurrentDateTime().toString(),idCurrent.value))
+        }
+    }
+    fun deleteNotes(){
+        viewModelScope.launch {
+            repository.deleteNotes(Notes("","","",idCurrent.value))
+        }
+    }
+
+    fun getCurrentDateTime(): Date {
+        return Calendar.getInstance().time
+    }
+
 }

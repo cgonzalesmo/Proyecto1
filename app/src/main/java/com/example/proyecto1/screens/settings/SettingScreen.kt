@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ fun SettingScreen(
 ) {
     val showDialog = remember { mutableStateOf(false) }
     val showDialogNote = remember { mutableStateOf(false) }
+    val valueEdit = remember { mutableStateOf(false) }
     val notes = noteviewModel.notes.observeAsState().value ?: emptyList()
     val locations = viewModel.locations.observeAsState().value ?: emptyList()
     val context = LocalContext.current
@@ -91,10 +93,10 @@ fun SettingScreen(
                                 .show()
                         },
                     backgroundColor =
-                    if (location.locationName == viewModel.selectedLocation.value) {
-                        MyBlue
-                    }
-                    else SecondaryPrimaryDark,
+                        if (location.locationName == viewModel.selectedLocation.value) {
+                            MyBlue
+                        }
+                        else SecondaryPrimaryDark,
                     elevation = 5.dp,
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -157,7 +159,10 @@ fun SettingScreen(
                             placeholder = { Text(text = "Arequipa", color = Color.LightGray) },
                         )
                     }
+
                 },
+
+
                 confirmButton = {
                     Button(
                         onClick = {
@@ -211,7 +216,12 @@ fun SettingScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .padding(5.dp),
+                        .padding(5.dp)
+                        .clickable {
+                            note.id?.let { noteviewModel.setIdCurrent(it) }
+                            showDialogNote.value = true
+                            valueEdit.value = true
+                        },
                     elevation = 5.dp,
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -226,6 +236,16 @@ fun SettingScreen(
                             text = note.notesName,
                             color = Color.White
                         )
+                        IconButton(onClick = {
+                            note.id?.let { noteviewModel.setIdCurrent(it) }
+                            noteviewModel.deleteNotes()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             }
@@ -239,11 +259,15 @@ fun SettingScreen(
                     .padding(10.dp),
                 onDismissRequest = {
                     showDialogNote.value = false
+                    valueEdit.value = false
                 },
                 title = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Añadir Notas",
+                        text =
+                            if(valueEdit.value==false) {
+                                "Añadir Notas"
+                            }else "Editar Nota",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp,
@@ -264,15 +288,30 @@ fun SettingScreen(
                             },
                             textStyle = TextStyle(color = Color.White),
                             label = { Text(text = "Ingresa tu nota", color = Color.LightGray) },
-                            placeholder = { Text(text = "Escribe..", color = Color.LightGray) },
+                            placeholder = { Text(text = "nota..", color = Color.LightGray) },
+                        )
+                        TextField(
+                            value = noteviewModel.textFieldDesValue.value,
+                            onValueChange = {
+                                noteviewModel.setTextFieldDesValue(it)
+                            },
+                            textStyle = TextStyle(color = Color.White),
+                            label = { Text(text = "Ingresa la descripcion", color = Color.LightGray) },
+                            placeholder = { Text(text = "Descripcion..", color = Color.LightGray) },
                         )
                     }
                 },
                 confirmButton = {
                     Button(
                         onClick = {
-                            noteviewModel.insertNotes()
+                            if(valueEdit.value==false){
+                                noteviewModel.insertNotes()
+                            }
+                            else{
+                                noteviewModel.editNotes()
+                            }
                             showDialogNote.value = false
+                            valueEdit.value = false
                         },
                         colors = ButtonDefaults.buttonColors(MyBlue)
                     ) {

@@ -14,8 +14,17 @@ class NoteRepository(
         dao.insertNote(notes)
     }
 
+    suspend fun updateNotes(notes: Notes){
+        dao.updateNote(notes)
+    }
+    suspend fun deleteNotes(notes: Notes){
+        dao.deleteNote(notes)
+    }
+
     fun getAllNotes(): LiveData<List<Notes>> {
         return dao.getAllNotes()
     }
+
+
 
 }
