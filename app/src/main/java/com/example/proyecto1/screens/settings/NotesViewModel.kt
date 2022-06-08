@@ -1,51 +1,38 @@
 package com.example.proyecto1.screens.settings
 
-
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto1.data.local.Locations
-import com.example.proyecto1.data.repository.DataRepository
+import com.example.proyecto1.data.notes.Notes
+import com.example.proyecto1.data.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    private val repository: DataRepository,
+public class NotesViewModel @Inject constructor(
+    private val repository: NoteRepository,
 ) : ViewModel() {
 
-    private val _selectedLocation = mutableStateOf("")
-    val selectedLocation: State<String> = _selectedLocation
 
     private val _textFieldValue = mutableStateOf("")
     val textFieldValue: State<String> = _textFieldValue
 
-    val locations = repository.getAllLocations()
+    val notes = repository.getAllNotes()
 
-    init {
-        viewModelScope.launch {
-            repository.currentlySelectedLocation.collect { loc ->
-                _selectedLocation.value = loc.toString()
-            }
-        }
-    }
-
-    fun savedToSharedPrefs(locationName: String) {
-        repository.saveToSharedPrefs(locationName)
-    }
 
     fun setTextFieldValue(value: String) {
         _textFieldValue.value = value
     }
 
-    fun insertLocation() {
+    fun insertNotes() {
         viewModelScope.launch {
             if (textFieldValue.value.isBlank()) {
                 return@launch
             }
-            repository.insertLocation(Locations(textFieldValue.value,"asd","545454.5454","5454.5445"))
+            repository.insertNotes(Notes(textFieldValue.value,"aa","19-9-2020"))
         }
     }
 }

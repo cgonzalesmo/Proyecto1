@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface LocationsDao {
     @Insert
-    suspend fun insertLocation(locations: Locations)
+    suspend fun insertLocation(locations: Locations,)
 
     @Query("SELECT * FROM locations_table ORDER BY locationName ASC")
     fun getAllLocations(): LiveData<List<Locations>>

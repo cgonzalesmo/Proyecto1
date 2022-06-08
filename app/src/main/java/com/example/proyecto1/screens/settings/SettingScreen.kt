@@ -31,17 +31,19 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun SettingScreen(
+    noteviewModel: NotesViewModel = hiltViewModel(),
     viewModel: SettingsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val showDialog = remember { mutableStateOf(false) }
+    val showDialogNote = remember { mutableStateOf(false) }
+    val notes = noteviewModel.notes.observeAsState().value ?: emptyList()
     val locations = viewModel.locations.observeAsState().value ?: emptyList()
     val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-
         StandardToolbar(
             navigator = navigator,
             title = {
@@ -88,9 +90,11 @@ fun SettingScreen(
                                 )
                                 .show()
                         },
-                    backgroundColor = if (location.locationName == viewModel.selectedLocation.value) {
+                    backgroundColor =
+                    if (location.locationName == viewModel.selectedLocation.value) {
                         MyBlue
-                    } else SecondaryPrimaryDark,
+                    }
+                    else SecondaryPrimaryDark,
                     elevation = 5.dp,
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -159,6 +163,116 @@ fun SettingScreen(
                         onClick = {
                             viewModel.insertLocation()
                             showDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(MyBlue)
+                    ) {
+                        Text(text = "Guardar", color = Color.White)
+                    }
+                },
+                backgroundColor = SecondaryPrimaryDark,
+                contentColor = Color.Black,
+                shape = RoundedCornerShape(10.dp)
+            )
+        }
+
+
+
+        /*aqui empieza notas*/
+        StandardToolbar(
+            navigator = navigator,
+            title = {
+                Text(
+                    text = "Añadir Notas",
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            },
+            showBackArrow = false,
+            navActions = {
+                Row(
+                ) {
+                    IconButton(onClick = {
+                        showDialogNote.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
+        )
+        LazyColumn(
+            verticalArrangement = Arrangement.Top,
+        ) {
+            items(notes) { note ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(5.dp),
+                    elevation = 5.dp,
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = note.notesName,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+
+
+        if (showDialogNote.value) {
+            AlertDialog(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                onDismissRequest = {
+                    showDialogNote.value = false
+                },
+                title = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Añadir Notas",
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        TextField(
+                            value = noteviewModel.textFieldValue.value,
+                            onValueChange = {
+                                noteviewModel.setTextFieldValue(it)
+                            },
+                            textStyle = TextStyle(color = Color.White),
+                            label = { Text(text = "Ingresa tu nota", color = Color.LightGray) },
+                            placeholder = { Text(text = "Escribe..", color = Color.LightGray) },
+                        )
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            noteviewModel.insertNotes()
+                            showDialogNote.value = false
                         },
                         colors = ButtonDefaults.buttonColors(MyBlue)
                     ) {

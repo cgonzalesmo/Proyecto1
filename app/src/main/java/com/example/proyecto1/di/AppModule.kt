@@ -7,10 +7,14 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.proyecto1.data.local.LocationsDao
 import com.example.proyecto1.data.local.LocationsDatabase
+import com.example.proyecto1.data.notes.NotesDao
+import com.example.proyecto1.data.notes.NotesDatabase
 import com.example.proyecto1.data.remote.ApiService
 import com.example.proyecto1.data.repository.DataRepository
+import com.example.proyecto1.data.repository.NoteRepository
 import com.example.proyecto1.util.Constants.BASE_URL
 import com.example.proyecto1.util.Constants.DATABASE_NAME
+import com.example.proyecto1.util.Constants.DATABASE_NAME_NOTE
 import com.example.proyecto1.util.Constants.WEATHER_LOCATION
 import dagger.Module
 import dagger.Provides
@@ -39,7 +43,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWeatherLocation(sharedPreferences: SharedPreferences): String {
-        return sharedPreferences.getString(WEATHER_LOCATION, "Nairobi") ?: "Nairobi"
+        return sharedPreferences.getString(WEATHER_LOCATION, "Arequipa") ?: "Arequipa"
     }
 
     @Provides
@@ -54,7 +58,22 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideNotesDatabase(application: Application): NotesDatabase {
+        return Room.databaseBuilder(
+            application.applicationContext,
+            NotesDatabase::class.java,
+            DATABASE_NAME_NOTE
+        ).fallbackToDestructiveMigration().build()
+    }
+
+
+    @Provides
+    @Singleton
     fun provideLocationsDao(locationsDatabase: LocationsDatabase) = locationsDatabase.dao
+
+    @Provides
+    @Singleton
+    fun provideNotesDao(notesDatabase: NotesDatabase) = notesDatabase.dao
 
     @Singleton
     @Provides
@@ -93,4 +112,10 @@ object AppModule {
         locationsDao: LocationsDao,
         sharedPreferences: SharedPreferences
     ) = DataRepository(apiService, locationsDao, sharedPreferences)
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(
+        notesDao: NotesDao,
+    ) = NoteRepository(notesDao)
 }
