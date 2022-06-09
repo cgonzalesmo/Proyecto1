@@ -1,7 +1,9 @@
 package com.example.proyecto1.screens.settings
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,6 +31,7 @@ import com.example.proyecto1.ui.theme.SecondaryPrimaryDark
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun SettingScreen(
@@ -39,6 +42,7 @@ fun SettingScreen(
     val showDialog = remember { mutableStateOf(false) }
     val showDialogNote = remember { mutableStateOf(false) }
     val valueEdit = remember { mutableStateOf(false) }
+    val valueEdit2 = remember { mutableStateOf(false) }
     val notes = noteviewModel.notes.observeAsState().value ?: emptyList()
     val locations = viewModel.locations.observeAsState().value ?: emptyList()
     val context = LocalContext.current
@@ -82,16 +86,22 @@ fun SettingScreen(
                         .fillMaxWidth()
                         .height(60.dp)
                         .padding(5.dp)
-                        .clickable {
-                            viewModel.savedToSharedPrefs(location.locationName)
-                            Toast
-                                .makeText(
-                                    context,
-                                    "${location.locationName} Ubicación seleccionada por defecto",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        },
+                        .combinedClickable(
+                            onDoubleClick = {
+                                viewModel.savedToSharedPrefs(location.locationName)
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "${location.locationName} Ubicación seleccionada por defecto",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show() },
+                            onClick = {
+                                location.id?.let { viewModel.setIdCurrent(it) }
+                                valueEdit2.value = true
+                                showDialog.value = true
+                            }
+                        ),
                     backgroundColor =
                         if (location.locationName == viewModel.selectedLocation.value) {
                             MyBlue
@@ -111,11 +121,14 @@ fun SettingScreen(
                             text = location.locationName,
                             color = Color.White
                         )
-                        if (location.locationName == viewModel.selectedLocation.value) {
+                        IconButton(onClick = {
+                            location.id?.let { viewModel.setIdCurrent(it) }
+                            viewModel.deleteLocation()
+                        }) {
                             Icon(
-                                imageVector = Icons.Default.Check,
-                                tint = Color.White,
-                                contentDescription = null
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null,
+                                tint = Color.White
                             )
                         }
                     }
@@ -131,11 +144,15 @@ fun SettingScreen(
                     .padding(10.dp),
                 onDismissRequest = {
                     showDialog.value = false
+                    valueEdit2.value = false
                 },
                 title = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Añadir Ciudad",
+                        text =
+                            if(valueEdit2.value==false) {
+                                "Añadir Ciudad"
+                            }else "Editar Ciudad",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp,
@@ -156,7 +173,16 @@ fun SettingScreen(
                             },
                             textStyle = TextStyle(color = Color.White),
                             label = { Text(text = "Ingresa el Nombre", color = Color.LightGray) },
-                            placeholder = { Text(text = "Arequipa", color = Color.LightGray) },
+                            placeholder = { Text(text = "Nombre...", color = Color.LightGray) },
+                        )
+                        TextField(
+                            value = viewModel.textFieldDesValue.value,
+                            onValueChange = {
+                                viewModel.setTextFieldDesValue(it)
+                            },
+                            textStyle = TextStyle(color = Color.White),
+                            label = { Text(text = "Ingresa la Descripción", color = Color.LightGray) },
+                            placeholder = { Text(text = "Descripción...", color = Color.LightGray) },
                         )
                     }
 
@@ -166,8 +192,14 @@ fun SettingScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            viewModel.insertLocation()
+                            if(valueEdit2.value==false){
+                                viewModel.insertLocation()
+                            }
+                            else{
+                                viewModel.editLocation()
+                            }
                             showDialog.value = false
+                            valueEdit2.value = false
                         },
                         colors = ButtonDefaults.buttonColors(MyBlue)
                     ) {

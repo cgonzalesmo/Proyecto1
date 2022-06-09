@@ -41,6 +41,14 @@ class DataRepository(
         dao.insertLocation(locations)
     }
 
+    suspend fun updateLocation(locations: Locations) {
+        dao.updateLocation(locations)
+    }
+
+    suspend fun deleteLocation(locations: Locations) {
+        dao.deleteLocation(locations)
+    }
+
     fun getAllLocations(): LiveData<List<Locations>> {
         return dao.getAllLocations()
     }
